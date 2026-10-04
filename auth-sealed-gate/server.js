@@ -1,7 +1,7 @@
 // Imports
 const express = require('express')
-const app = express
-require('dotenv').config()
+const app = express()
+const dotenv = require('dotenv').config()
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const methodOverride = require('method-override')
@@ -39,11 +39,10 @@ connectToDB()
 
 // Authentication guard
 function isUserSignedIn(req, res, next) {
-  if (!req.session.user) {
-    return res.redirect('/auth/sign-in')
+  if (req.session.user) {
+    return next()
   }
-
-  next
+  res.redirect('/auth/sign-in')
 }
 
 // Make the signed-in user available in every EJS view
